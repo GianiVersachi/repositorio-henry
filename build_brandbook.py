@@ -85,22 +85,49 @@ def bg(canvas, doc):
     canvas.restoreState()
 
 def draw_monogram(canvas, cx, cy, h, color):
-    """Monograma estilizado LH (dos astas + travesaño con curva)."""
+    """Reproducción vectorial del logo Terra Home: 'T' invertida + 'H',
+    con bases en bracket, travesaño con bucle y 'TERRA HOME' vertical."""
     canvas.saveState()
     canvas.setStrokeColor(color); canvas.setFillColor(color)
-    bw = h*0.16
-    gap = h*0.42
-    # asta izquierda (L) con base
-    canvas.rect(cx-gap-bw/2, cy, bw, h, fill=1, stroke=0)
-    canvas.rect(cx-gap-bw/2, cy, gap*0.9, bw*0.9, fill=1, stroke=0)
-    # asta derecha (H)
-    canvas.rect(cx+gap-bw/2, cy, bw, h, fill=1, stroke=0)
-    # travesaño curvo uniendo ambas
-    canvas.setLineWidth(bw*0.55)
-    p = canvas.beginPath()
-    p.moveTo(cx-gap+bw/2, cy+h*0.46)
-    p.curveTo(cx-h*0.04, cy+h*0.40, cx+h*0.02, cy+h*0.52, cx+gap-bw/2, cy+h*0.46)
-    canvas.drawPath(p, stroke=1, fill=0)
+    bw = h*0.135
+    gap = h*0.30
+    xL, xR = cx-gap, cx+gap
+    # astas verticales
+    canvas.rect(xL-bw/2, cy+h*0.04, bw, h*0.96, fill=1, stroke=0)
+    canvas.rect(xR-bw/2, cy+h*0.04, bw, h*0.96, fill=1, stroke=0)
+    # pies tipo bracket (curva cóncava hacia el exterior)
+    foot = h*0.20
+    def base(xc, direction):
+        p = canvas.beginPath()
+        outer = xc + direction*(bw/2+foot)
+        p.moveTo(xc-direction*bw/2, cy+h*0.04)
+        p.lineTo(xc+direction*bw/2, cy+h*0.04)
+        p.lineTo(xc+direction*bw/2, cy+bw*0.9)
+        p.curveTo(xc+direction*bw/2, cy+bw*0.4,
+                  outer-direction*foot*0.3, cy,
+                  outer, cy)
+        p.lineTo(xc-direction*bw/2, cy)
+        p.close()
+        canvas.drawPath(p, fill=1, stroke=0)
+    base(xL, -1)   # pie izquierdo barre a la izquierda
+    base(xR, +1)   # pie derecho barre a la derecha
+    # travesaño con bucle (la panza de la 'h')
+    canvas.setLineWidth(bw*0.5)
+    p2 = canvas.beginPath()
+    p2.moveTo(xL+bw/2, cy+h*0.44)
+    p2.curveTo(cx-h*0.06, cy+h*0.40, cx+h*0.04, cy+h*0.62, cx+h*0.06, cy+h*0.50)
+    p2.curveTo(cx+h*0.08, cy+h*0.40, xR-bw/2-h*0.02, cy+h*0.40, xR-bw/2, cy+h*0.44)
+    canvas.drawPath(p2, stroke=1, fill=0)
+    # 'TERRA HOME' vertical, serif fino espaciado
+    canvas.saveState()
+    canvas.translate(xR+bw/2+h*0.11, cy+h*0.06)
+    canvas.rotate(90)
+    t = canvas.beginText(0, 0)
+    t.setFont("Times-Roman", h*0.072); t.setFillColor(color)
+    t.setCharSpace(h*0.022)
+    t.textOut("TERRA HOME")
+    canvas.drawText(t)
+    canvas.restoreState()
     canvas.restoreState()
 
 def cover(canvas, doc):
