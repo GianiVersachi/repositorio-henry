@@ -21,6 +21,7 @@ SAND   = HexColor("#D8C7AE")
 GREYTX = HexColor("#5E5246")
 
 PAGE_W, PAGE_H = A4
+LOGO_PATH = "/home/user/repositorio-henry/assets/logo-terra-home.png"
 SERIF = "Times-Roman"
 SERIF_B = "Times-Bold"
 SERIF_I = "Times-Italic"
@@ -112,7 +113,16 @@ def cover(canvas, doc):
     canvas.setLineWidth(0.4)
     canvas.rect(18*mm, 18*mm, PAGE_W-36*mm, PAGE_H-36*mm, fill=0, stroke=1)
 
-    draw_monogram(canvas, PAGE_W/2, PAGE_H/2+18*mm, 42*mm, GOLD)
+    import os
+    if os.path.exists(LOGO_PATH):
+        from reportlab.lib.utils import ImageReader
+        img = ImageReader(LOGO_PATH)
+        iw, ih = img.getSize()
+        h = 52*mm; w = h*iw/ih
+        canvas.drawImage(img, PAGE_W/2-w/2, PAGE_H/2+6*mm, width=w, height=h,
+                         mask="auto", preserveAspectRatio=True)
+    else:
+        draw_monogram(canvas, PAGE_W/2, PAGE_H/2+18*mm, 42*mm, GOLD)
 
     def spaced(text, font, size, color, y, tracking):
         w = canvas.stringWidth(text, font, size) + tracking*(len(text)-1)
@@ -265,7 +275,8 @@ def build(path):
 
     # 3. Logo
     S += section("Logotipo", "03 — Nuestro símbolo")
-    S.append(Paragraph("Monograma <b>“LH”</b> entrelazado acompañado del nombre TERRA HOME en "
+    S.append(Paragraph("Monograma compuesto por una <b>“T” invertida entrelazada con una “H”</b> "
+        "(Terra Home), tipografiado en <b>Brown Sugar</b>, acompañado del nombre TERRA HOME en "
         "serif vertical. Es el activo visual más reconocible de la marca.", BODY))
     S.append(Paragraph("Versiones", H_SUB))
     S.append(bullets([
@@ -315,6 +326,9 @@ def build(path):
         "The Seasons en mayúsculas con buen espaciado entre letras para titulares.",
         "Glacial Indifference para todo lo funcional. Es la que más se usa.",
     ]))
+    S.append(Paragraph("<i>Tipografía del logotipo: <b>Brown Sugar</b> — de uso exclusivo para el "
+        "monograma y el isotipo. No usarla en textos.</i>",
+        style("notef",parent=BODY,fontName=SERIF_I,textColor=SAND,fontSize=8.5)))
     S.append(PageBreak())
 
     # 6. Dirección de arte
