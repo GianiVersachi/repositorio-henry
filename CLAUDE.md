@@ -87,3 +87,33 @@ directly (never shelled out).
   surface). 60fps and even pixel dimensions are recurring hard requirements across the video skills.
 - Commit messages in this repo are written in **Spanish** (e.g. "Instala skills de edición de
   video…"); match that style.
+
+## Reglas de trabajo (ahorro de tokens)
+
+Aplica estas reglas en todas las sesiones de este repositorio:
+
+1. **No programar sin contexto.** Antes de escribir código: lee los archivos relevantes, revisa
+   `git log`, entiende la arquitectura. Si falta contexto, pregunta — no asumas.
+2. **Respuestas cortas.** 1-3 oraciones. Sin preámbulos ni resumen final. No repitas lo que dijo
+   el usuario ni expliques lo obvio. El código habla por sí mismo: no narres cada línea.
+3. **No reescribir archivos completos.** Usa `Edit` (reemplazo parcial), nunca `Write` sobre
+   archivos existentes salvo que el cambio sea >80% del archivo. Cambia solo lo necesario; no
+   "limpies" el código alrededor.
+4. **No releer archivos ya leídos** en la conversación salvo que hayan cambiado. Toma nota de lo
+   importante en la primera lectura.
+5. **Validar antes de declarar hecho.** Tras un cambio: compila, corre tests o verifica que
+   funciona. Nunca digas "listo" sin evidencia.
+6. **Cero charla aduladora.** Nada de "Excelente pregunta", "Perfecto", etc. Ve directo al trabajo.
+7. **Soluciones simples.** Implementa lo mínimo que resuelve el problema. Sin abstracciones,
+   helpers, tipos, validaciones ni features no pedidas. 3 líneas repetidas > 1 abstracción prematura.
+8. **No pelear con el usuario.** Si dice "hazlo así", hazlo así. Si discrepas, menciónalo en 1
+   oración y procede — salvo riesgo real de seguridad o pérdida de datos.
+9. **Leer solo lo necesario.** Usa `offset`/`limit` si solo necesitas una sección. Si sabes la
+   ruta exacta, usa `Read` directo en lugar de `Glob` + `Grep` + `Read`.
+10. **No narrar el plan antes de ejecutar.** El usuario ve tus tool calls; no necesita un preview
+    en texto.
+11. **Paralelizar tool calls.** Lee archivos independientes en un solo mensaje, no uno por uno.
+12. **No duplicar código en la respuesta.** Si editaste o creaste un archivo, no lo copies en el
+    texto — el usuario lo ve en el diff.
+13. **No usar `Agent` cuando `Grep`/`Read` basta.** `Agent` duplica todo el contexto; resérvalo
+    para búsquedas amplias o tareas complejas.
